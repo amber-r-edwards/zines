@@ -1,0 +1,89 @@
+Dataset
+- looking at locations mentioned - Sisters in Struggle - announcements of either activism or crimes/oppression against women - advertisements of upcoming events
+- other separate listings with event information
+- advertisements
+
+Controlled Vocab
+Events:
+- Protest Report - report of a previous organized or spontaneous event of protest/activism
+- Event Advertisement - posting of an event's details ahead of time (speakers, conferences, etc.)
+- Call to Organize - call to set up a protest or organize a group to do an action (different than just an event?)
+- Advocacy - events relating to legal/political advocacy that doesn't necessarily fall into the protest category - often announcements of legal successes or failures, not something a mass participated/could participate in
+- Meeting Report - (added 2/28) - report of previous meetings/organizations/conferences that do not fit into protest report category
+
+Resources (spend more time with this via Dr. Regan)
+- Reproductive Healthcare - often information about doctors and councilors for abortions or birth control
+- Organizations - new groups trying to form or seeking new members - not advertising one specific event
+- Childcare - listings of childcare resources/catering specifically to mothers to be able to bring their children
+- Bookstore - often women owned/focused on dispensing feminist/radical literatire
+- Courses - class (formal or informal) offered
+- Services - listing of misc services for women/by women
+- Listing - job/opportunity or something for sale requesting applicants/customers - listing requesting resources/support - plug of other publications developing
+
+col - source.publication - could be diff table
+- source table to compile all details about the publications so then I could imput multiple into the same file (summer research)
+
+LNS - Liberation News Service
+- network of dispensing information between newsletters/publications
+
+Description - 2/25
+This is a dataset of the events and resources found in "It Ain't Me Babe" - a women's liberation zine sourced from the Independent Voices digital collection via JSTOR. I created one main table with each of the 19 available issues' Volume and Number information, title, issue date, and file of the pdf. Using a volume ID as the foreign key, I created two additional tables that compiled events and resources and related them to their respective volumes in the original table. The events table contains a controlled vocab of types of events (Protest Report, Call to Organize, Event Advertisement, Advocacy) - similar with the resources table (Reproductive Healthcare, Organizations, Childcare, Bookstore). This organization does not account for the artistic/reader-entry pieces that make up the bulk of the zines, or some of the announcements/advertisements that I had trouble labelling/reducing to a category
+
+3/9/25 Notes
+- event #62 - women relocating and requesting support - put under oppression report because of details from oppression in IN, unsure if should be in Resources table?
+	- case study of women seeing San Fran as place of liberated refuge? - Gail Eckl and Dorothy Woodward - place vs space
+- Babe1.7 - more instances of just "letter to the editor" type entries - should this be a separate table?
+	- reprinted articles/materials
+	- plugs of other publications
+- using ISO 3166 country codes
+	- decided on A-3 to help distinguish from state codes
+- event #54 - Berkeley Barb - BGSU
+- bay area resources not providing specific city for entries - omitting to NA and leaving CA
+- Babe1.8 - call for "help" - not events not resources
+
+3/24/25 Notes
+- Babe1.9 - Sesame Street entry under SIS - doesn't fit any categories?
+
+3/25/25
+- Babe 1.9 - unsure on Up Haste bookstore name
+- Babe 1.11 - SIS New York, less Gal Fridays - not protest, not advocacy? more of a status update
+- the more I do this the more I question my choices about date
+- Babe 1.11 - SIS, London, inclusion of change to metric system on bathing suit poster?
+
+3/26/25
+- Babe 1.13 - Everyone's for Women's Liberation - note on questions being allowed at Miss America pageant
+- Women's Liberation Orientation Meetings - Women's Center Orientation Meetings
+
+3/27/25
+- Babe 1.14 - can't tell if Vatican City entry is oppression or protest or advocacy?
+
+3/28/25
+- Babe 1.14 - letters from prison page - ICW Free Joan Little (sticky note on wall)
+- expanded definition of listing to include plugged publications
+- starting to see repeated ads - both for businesses and within event advertisements - copying and adjusting minor details when possible
+- Inside Out - put into events instead of resources under organization because it is an event of the group, not an invitation to join the group
+- Babe 1.15 - no Sisters in Struggle section
+
+3/30/25
+- "Struggle" instead of SIS - heavier presence of NOW reporting
+- Babe 1.16 note about difficulty keeping the struggle section going for lack of information on what various W.L groups are doing - request for newsletters or write ups, relevant newspaper items, or information of new groups
+	- lists various addresses that were left out/received after the directory printed in Babe #11 of diff W.L. groups
+- more frequent reprinting from previous issue - loss of momentum?
+- Babe 1.16 - Whitepages, Atlantic Beach, FL - contact book for women seeking friendship of other women - hidden langauge?
+- Babe 1.17/1.17S - few entries other than artistic pieces and articles - seems to show less entries and issues filling out content
+
+Description - 3/30
+This is a dataset of events and resources found in "It Ain't Me Babe," that reveals multiple changes over time. Starting as a UC Berkeley-specific publication, Babe expands out nationally - even globally to a degree - but never loses its closest ties to the events and resources within the Berkeley and surrounding Bay Area community. As time goes on, there are fewer entries from other areas of the nation and the focus returns to Berkeley - though separate from the university. Early issues focus on protest and oppression reports - building around the language of "Sisters in Struggle," that is lost in later entries as fewer organizations/women write in for inclusion. In Babe1.16 there is a note about the increasing diffidulty keeping the struggle section going for lack of information, requesting assistance as "IT IS WHAT YOU MAKE IT" - potentially signalling a fragmentation in audience or loss of engagement as increasing numbers of publications and organizations became available. Because of this, later issues also reprint entries and have a heavier focus on advertisements for services or local businesses.
+
+3/31/25
+- looking back/working through early issues with new parameters - more events/advocacy woven into articles/full page pieces - prior to the construction of "Sisters in Struggle" or more organized sections
+- use of "yesterday" or "this weekend" leading to assumption based off given date on the publication but could be coming from whatever the news sources was - imprecision of dates	
+
+
+TO DO LIST
+- [x] check Babe 2.1 for events under "Meeting Report" category and resources under "Courses", "Service", and "Listing"
+- [x] separate events out of M/D/Y format (?)
+- [x] add international entries in events with full state/country code for Babe 1.1-1.6 and 2.1
+- [x] add resource.title to entries from prior to addition
+- [x] add source.publication for entries from prior to addition (check Babe 1.1-1.7 and 2.1)
+
