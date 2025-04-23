@@ -55,3 +55,7 @@ for (i in 1:nrow(eventswithmetadata)) {
     }
 }
 #getting Invalid Numbers for parts or all of the date when approx date is true - seems kinda random?
+
+#To Do:
+#- visualizations for presentation of dataset 
+#- fix invalid numbers issues
