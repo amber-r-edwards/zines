@@ -3,6 +3,7 @@ library(tidytext)
 library(readtext)
 library(widyr)
 library(SnowballC)
+library(lubridate)
 
 
 metadata <- read.csv("babemetadata.csv", sep = ",", header = TRUE)
@@ -19,8 +20,7 @@ ggplot(protestsbyymonth70, aes(x = event.month, y = count)) + geom_col()
 
 #put approx date from issue publication for entries with NA (month and year only)
 #joined metadata with events, pared down to just the columns I want
-eventswithmetadata <- full_join(events, metadata, join_by("Volumes" == "vol.ID")) %>%
-    select(ID, event.title, publication, Volumes, issue.mo, issue.year, vol.title, event.type, event.month, event.year, notes)
+eventswithmetadata <- full_join(events, metadata, join_by("Volumes" == "vol.ID"))
 
 eventswithmetadata$approx.date <- NA
 
@@ -42,6 +42,37 @@ for (i in 1:nrow(eventswithmetadata)) {
     }
 }
 
+#visualizations - dataset bio presentation
+#types of events over time
+eventtypes <- eventswithmetadata %>%
+    separate_rows(event.type, sep = ",") %>% #split entries with multiple types into separate rows
+    group_by(event.type, event.month, event.year) %>%
+    summarize(count = n()) %>%
+    mutate(event.date = make_date(year = event.year, month = event.month)) #create date with both for use in plots
+
+ggplot(eventtypes, aes(x=factor(event.date), y=count, fill = event.type)) + 
+    facet_wrap(~event.type) + geom_col() + 
+    labs(title = "Number of events in the Babe over time, faceted by type of event", x="Date", y="count") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") 
+
+#types of(?) events over space
+eventsgeo <- eventswithmetadata %>%
+    select(ID, event.title, Volumes, event.type, event.month, event.date, event.year, event.location, event.address, event.city, event.state, event.country, source.publication, notes)
+
+#have some dates with date and others without - to combine have to do two sep things
+for (i in 1:nrow(eventsgeo)) {
+    if (is.na(eventsgeo$event.date[i])) {
+        eventsgeo <- eventsgeo %>%
+            mutate(date = make_date(year=event.year, month=event.month))
+    } else {
+        eventsgeo <- eventsgeo %>%
+            mutate(date = make_date(year=event.year, month=event.month, day=event.date))
+    }
+}
+
+
+
+
 # ----------NOTES---------------------
 #Row 21 - issue.year: NA
 #blank row? probably just an error - will remove row and then run loop again and see if that fixes it
@@ -57,6 +88,11 @@ eventswithmetadata <- eventswithmetadata[-21, ]
 #ensure both are numeric before running loop
 #add print() into loop to inspect values being assigned
 
-#To Do:
-#- visualizations for presentation of dataset 
-#- fix invalid numbers issues
+#should not use mutate() within loop - direct assignment of columns instead (saving and pushing what i did before changing for visibility)
+
+#my notes
+#4/27
+#  - one issue I foresee running into is event types that fit multiple categories throwing off the data analysis (fized with separate_rows)
+#  - date as factor to make it easier to see rather than a skinney line indicating 1st of month (as put into data frame)
+
+
