@@ -99,17 +99,17 @@ alleventscoords <- alleventscoords %>%
 
 #leaflet
 alleventscoords <- alleventscoords %>%
-    select(ID, event.title, Volumes, event.type, event.month, event.date, event.year, 
+    select(ID, event.title, Volumes, event.type, 
            event.location, event.address, event.city, event.state, event.country, 
-           latitude, longitude, notes)
+           latitude, longitude, notes, date)
 
 eventmap <- leaflet(alleventscoords) %>%
     addTiles() %>%
-    addMarkers(~longitude, ~latitude, popup = paste(event.title, "-", event.type, "- in", Volumes, "at", event.location, "(", event.address, ",", event.city, ",", event.state, ")", date, ":", notes, sep = " "))
+    addMarkers(~longitude, ~latitude, popup = paste(alleventscoords$event.title, "-", alleventscoords$event.type, "- in", alleventscoords$Volumes, "at", alleventscoords$event.location, "(", alleventscoords$event.address, ",", alleventscoords$event.city, ",", alleventscoords$event.state, ")", alleventscoords$date, ":", alleventscoords$notes, sep = " "))
+eventmap
 
 #issue with recognizing column names: "Error: object 'event.title' not found" - copilot not being helpful
-#not the end of the world - will circle back at some point
-
+#not the end of the world - will circle back at some point - NEEDED THE DATA NAME AND A $ 
 
 
 
@@ -136,6 +136,7 @@ eventswithmetadata <- eventswithmetadata[-21, ]
 #4/27
 #  - one issue I foresee running into is event types that fit multiple categories throwing off the data analysis (fized with separate_rows)
 #  - date as factor to make it easier to see rather than a skinney line indicating 1st of month (as put into data frame)
+#  - filtered to USA coordinates because of so few international entries - ease of viewing for presentation
 #  - applied jitter to ggplot map for visibility at concentrated areas - not super effective but not worrying about minute details for this presentation
 
 
