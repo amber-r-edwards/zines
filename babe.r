@@ -55,9 +55,11 @@ eventtypes <- eventswithmetadata %>%
     mutate(event.date = make_date(year = event.year, month = event.month)) #create date with both for use in plots
 
 ggplot(eventtypes, aes(x=factor(event.date), y=count, fill = event.type)) + 
-    facet_wrap(~event.type) + geom_col() + 
+    facet_wrap(~event.type, nrow = 1) + geom_col() + 
     labs(title = "Number of events in the Babe over time, faceted by type of event", x="Date", y="count") +
     theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") 
+
+ggsave("eventtypes_plot.png", width = 15, height = 5)
 
 #types of(?) events over space
 eventsgeo <- eventswithmetadata %>%
