@@ -120,6 +120,38 @@ library(htmlwidgets)
 saveWidget(eventmap, "eventmap.html", selfcontained = TRUE) #saves leaflet as HTML file - selfcontained makes it portable
 #not working - not worth more hours of tinkering
 
+#repeat with resources
+resourcesmetadata <- full_join(resources, metadata, join_by("Volumes" == "vol.ID"))
+#resources over time
+resourcetypes <- resourcesmetadata %>%
+    separate_rows(type.resource, sep = ",") %>% #split entries with multiple types into separate rows
+    group_by(type.resource, issue.mo, issue.year) %>%
+    summarize(count = n()) %>%
+    mutate(date = make_date(year = issue.year, month = issue.mo)) #create date with both for use in plots
+
+ggplot(resourcetypes, aes(x=factor(date), y=count, fill = type.resource)) + 
+    facet_wrap(~type.resource, nrow = 1) + geom_col() + 
+    labs(title = "Number of resources in the Babe over time, faceted by type of event", x="Date", y="count") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") 
+
+ggsave("resourcetypes_plot.png", width = 15, height = 5)
+#resources over space
+resourcesgeo <- resourcesmetadata %>%
+    select(ID, resource.title, Volumes, type.resource, resource.location, resource.address, resource.city, resource.state, source.publication, notes)
+
+#geocode - some have addresses - others do not (have to omit or do separately)
+resaddcoords <- resourcesgeo %>% 
+    filter(resource.address != "NA") %>%
+    geocode(address = resource.address, method = 'osm', lat = latitude, long = longitude)
+
+rescoord <- resourcesgeo %>% 
+    filter(is.na(resource.address)) %>%
+    geocode(city = resource.city, state = resource.state, method = 'osm', lat = latitude, long=longitude)
+
+allresourcecoords <- full_join(resaddcoords, rescoord) %>%
+    separate_rows(type.resource, sep = ",")
+#a lot more invalid here because of the addresses being weird
+
 # ----------NOTES---------------------
 #Row 21 - issue.year: NA
 #blank row? probably just an error - will remove row and then run loop again and see if that fixes it
