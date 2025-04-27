@@ -90,14 +90,27 @@ ggplot() +
   labs(title = "Event Locations by Type")
 #jitter not super effective but fine for this map
 
-
-
 #few outliers messing with skew of map
 #copilot - exclude based on USA specific bounds:
 alleventscoords <- alleventscoords %>%
     filter(latitude >= 24 & latitude <= 50,  # Approximate bounds for the USA
            longitude >= -125 & longitude <= -66)
 #same issue with duplicate types - for ggplot would want separated out - for leaflet could leave together
+
+#leaflet
+alleventscoords <- alleventscoords %>%
+    select(ID, event.title, Volumes, event.type, event.month, event.date, event.year, 
+           event.location, event.address, event.city, event.state, event.country, 
+           latitude, longitude, notes)
+
+eventmap <- leaflet(alleventscoords) %>%
+    addTiles() %>%
+    addMarkers(~longitude, ~latitude, popup = paste(event.title, "-", event.type, "- in", Volumes, "at", event.location, "(", event.address, ",", event.city, ",", event.state, ")", date, ":", notes, sep = " "))
+
+#issue with recognizing column names: "Error: object 'event.title' not found" - copilot not being helpful
+#not the end of the world - will circle back at some point
+
+
 
 
 # ----------NOTES---------------------
