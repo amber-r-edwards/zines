@@ -60,15 +60,10 @@ eventsgeo <- eventswithmetadata %>%
     select(ID, event.title, Volumes, event.type, event.month, event.date, event.year, event.location, event.address, event.city, event.state, event.country, source.publication, notes)
 
 #have some dates with date and others without - to combine have to do two sep things
-for (i in 1:nrow(eventsgeo)) {
-    if (is.na(eventsgeo$event.date[i])) {
-        eventsgeo <- eventsgeo %>%
-            mutate(date = make_date(year=event.year, month=event.month))
-    } else {
-        eventsgeo <- eventsgeo %>%
-            mutate(date = make_date(year=event.year, month=event.month, day=event.date))
-    }
-}
+eventsgeo <- eventsgeo %>%
+    mutate(date = if_else(is.na(event.date),
+                         make_date(year = event.year, month = event.month),
+                         make_date(year = event.year, month = event.month, day = event.date)))
 
 
 
@@ -89,6 +84,8 @@ eventswithmetadata <- eventswithmetadata[-21, ]
 #add print() into loop to inspect values being assigned
 
 #should not use mutate() within loop - direct assignment of columns instead (saving and pushing what i did before changing for visibility)
+#   - didn't work - replaced those with dates with just the first of the month
+#trying without loop - vectorized approach with mutate() - BASICALLY WHAT I HAD TO BEGIN WITH
 
 #my notes
 #4/27
