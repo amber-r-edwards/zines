@@ -20,41 +20,42 @@ ggplot(protestsbyymonth70, aes(x = event.month, y = count)) + geom_col()
 #put approx date from issue publication for entries with NA (month and year only)
 #joined metadata with events, pared down to just the columns I want
 eventswithmetadata <- full_join(events, metadata, join_by("Volumes" == "vol.ID")) %>%
-    select(ID, event.title, publication, Volumes, issue.mo, issue.year, vol.title, event.type, event.month, event.year)
+    select(ID, event.title, publication, Volumes, issue.mo, issue.year, vol.title, event.type, event.month, event.year, notes)
 
-for(i in 1:nrow(eventswithmetadata)) {
+eventswithmetadata$approx.date <- NA
+
+for (i in 1:nrow(eventswithmetadata)) {
     if (is.na(eventswithmetadata$event.month[i])) {
         eventswithmetadata$event.month[i] <- eventswithmetadata$issue.mo[i]
         eventswithmetadata$approx.date[i] <- TRUE
-    }
-    else if (eventswithmetadata$event.month[i] is.na = FALSE) {
-    print("Event has date")
+    } else {
+        print("Event has month")
     }
 }
+
+for (i in 1:nrow(eventswithmetadata)) {
+    if (is.na(eventswithmetadata$event.year[i])) {
+        eventswithmetadata$event.year[i] <- eventswithmetadata$issue.year[i]
+        eventswithmetadata$approx.date[i] <- TRUE
+    } else {
+        print("Event has year")
+    }
+}
+
+# ----------NOTES---------------------
+#Row 21 - issue.year: NA
+#blank row? probably just an error - will remove row and then run loop again and see if that fixes it
+# Remove row 21 from the dataframe
+eventswithmetadata <- eventswithmetadata[-21, ]
+#still getting invalid number for all event years with TRUE approx dates even though the issue year is there
+#separating loops for month and year - resetting dataframe to try again - FIXED IT - am genius
 
 #copilot
 # Initialize the approx.date column with NA
-eventswithmetadata$approx.date <- NA
-
 # Loop to update event.month and approx.date
-for (i in 1:nrow(eventswithmetadata)) {
-    if (is.na(eventswithmetadata$event.month[i])) {
-        eventswithmetadata$event.month[i] <- eventswithmetadata$issue.mo[i]
-        eventswithmetadata$approx.date[i] <- TRUE
-    } else {
-        print("Event has date")
-    }
-}
-
-for (i in 1:nrow(eventswithmetadata)) {
-    if (is.na(eventswithmetadata$event.month[i])) {
-        eventswithmetadata$event.month[i] <- eventswithmetadata$issue.mo[i]
-        eventswithmetadata$approx.date[i] <- TRUE
-    } else {
-        print("Event has date")
-    }
-}
-#getting Invalid Numbers for parts or all of the date when approx date is true - seems kinda random?
+#   getting Invalid Numbers for parts or all of the date when approx date is true - seems kinda random?
+#ensure both are numeric before running loop
+#add print() into loop to inspect values being assigned
 
 #To Do:
 #- visualizations for presentation of dataset 
