@@ -111,7 +111,12 @@ eventmap
 #issue with recognizing column names: "Error: object 'event.title' not found" - copilot not being helpful
 #not the end of the world - will circle back at some point - NEEDED THE DATA NAME AND A $ 
 
-
+#trying to put on website - html file and then put onto post in hugo site repo
+#copilot
+install.packages("htmlwidgets")
+library(htmlwidgets)
+saveWidget(eventmap, "eventmap.html", selfcontained = TRUE) #saves leaflet as HTML file - selfcontained makes it portable
+#not working - not worth more hours of tinkering
 
 # ----------NOTES---------------------
 #Row 21 - issue.year: NA
