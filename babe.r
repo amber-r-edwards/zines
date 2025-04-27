@@ -4,6 +4,10 @@ library(readtext)
 library(widyr)
 library(SnowballC)
 library(lubridate)
+library(ggmap)
+library(tidygeocoder)
+library(ggplot2) 
+library(leaflet)
 
 
 metadata <- read.csv("babemetadata.csv", sep = ",", header = TRUE)
@@ -65,7 +69,35 @@ eventsgeo <- eventsgeo %>%
                          make_date(year = event.year, month = event.month),
                          make_date(year = event.year, month = event.month, day = event.date)))
 
+#geocode - some have addresses - others do not (have to omit or do separately)
+eventsaddcoord <- eventsgeo %>% 
+    filter(event.address != "NA") %>%
+    geocode(address = event.address, method = 'osm', lat = latitude, long = longitude)
 
+eventscoord <- eventsgeo %>% 
+    filter(is.na(event.address)) %>%
+    geocode(city = event.city, state = event.state, country = event.country, method = 'osm', lat = latitude, long=longitude)
+
+alleventscoords <- full_join(eventsaddcoord, eventscoord) %>%
+    separate_rows(event.type, sep = ",")
+#some with NA/Invalid - going to omit for this visualization but would eventually need to fix
+
+usa <- map_data("state")
+
+ggplot() + 
+  geom_map(data = usa, map = usa, aes(x=long, y=lat, map_id=region), fill = "lightgray", color = "black") +
+  geom_jitter(data = alleventscoords, mapping = aes(x = longitude, y = latitude, color = event.type, size = 7)) +
+  labs(title = "Event Locations by Type")
+#jitter not super effective but fine for this map
+
+
+
+#few outliers messing with skew of map
+#copilot - exclude based on USA specific bounds:
+alleventscoords <- alleventscoords %>%
+    filter(latitude >= 24 & latitude <= 50,  # Approximate bounds for the USA
+           longitude >= -125 & longitude <= -66)
+#same issue with duplicate types - for ggplot would want separated out - for leaflet could leave together
 
 
 # ----------NOTES---------------------
@@ -91,5 +123,6 @@ eventswithmetadata <- eventswithmetadata[-21, ]
 #4/27
 #  - one issue I foresee running into is event types that fit multiple categories throwing off the data analysis (fized with separate_rows)
 #  - date as factor to make it easier to see rather than a skinney line indicating 1st of month (as put into data frame)
+#  - applied jitter to ggplot map for visibility at concentrated areas - not super effective but not worrying about minute details for this presentation
 
 
