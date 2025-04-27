@@ -152,6 +152,15 @@ allresourcecoords <- full_join(resaddcoords, rescoord) %>%
     separate_rows(type.resource, sep = ",")
 #a lot more invalid here because of the addresses being weird
 
+ggplot() + 
+  geom_map(data = usa, map = usa, aes(x=long, y=lat, map_id=region), fill = "lightgray", color = "black") +
+  geom_jitter(data = allresourcecoords, mapping = aes(x = longitude, y = latitude, color = type.resource, size = 7)) +
+  labs(title = "Resource Locations by Type")
+
+
+allresourcecoords <- allresourcecoords %>%
+    filter(latitude >= 24 & latitude <= 50,  # Approximate bounds for the USA
+           longitude >= -125 & longitude <= -66)
 # ----------NOTES---------------------
 #Row 21 - issue.year: NA
 #blank row? probably just an error - will remove row and then run loop again and see if that fixes it
