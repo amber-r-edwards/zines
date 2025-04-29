@@ -161,6 +161,14 @@ ggplot() +
 allresourcecoords <- allresourcecoords %>%
     filter(latitude >= 24 & latitude <= 50,  # Approximate bounds for the USA
            longitude >= -125 & longitude <= -66)
+
+#leaflet
+resourcemap <- leaflet(allresourcecoords) %>%
+    addTiles() %>%
+    addMarkers(~longitude, ~latitude, popup = paste(allresourcecoords$type.resource, "-", allresourcecoords$resource.title, ":", allresourcecoords$notes, "in", allresourcecoords$Volumes, "at", allresourcecoords$resource.location, allresourcecoords$resource.address, allresourcecoords$resource.city, allresourcecoords$resource.state, ", source publication:", allresourcecoords$source.publication, sep = " "))
+resourcemap
+
+
 # ----------NOTES---------------------
 #Row 21 - issue.year: NA
 #blank row? probably just an error - will remove row and then run loop again and see if that fixes it
